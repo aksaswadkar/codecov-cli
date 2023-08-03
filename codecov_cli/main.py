@@ -40,8 +40,8 @@ logger = logging.getLogger("codecovcli")
     "--enterprise-url", "--url", "-u", help="Change the upload host (Enterprise use)"
 )
 @click.option("-v", "--verbose", "verbose", help="Use verbose logging", is_flag=True)
-@click.pass_context
 @click.version_option(version=__version__)
+@click.pass_context
 def cli(
     ctx: click.Context,
     auto_load_params_from: typing.Optional[str],
