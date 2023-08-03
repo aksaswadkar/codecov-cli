@@ -59,7 +59,7 @@ def cli(
     if ctx.obj["codecov_yaml"] is None:
         logger.debug("No codecov_yaml found")
     ctx.obj["enterprise_url"] = enterprise_url
-
+    pass
 
 cli.add_command(do_upload)
 cli.add_command(create_commit)
