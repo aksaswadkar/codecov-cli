@@ -41,7 +41,7 @@ logger = logging.getLogger("codecovcli")
 )
 @click.option("-v", "--verbose", "verbose", help="Use verbose logging", is_flag=True)
 @click.pass_context
-@click.version_option(version=version)
+@click.version_option(version=__version__)
 def cli(
     ctx: click.Context,
     auto_load_params_from: typing.Optional[str],
