@@ -1,4 +1,5 @@
 import logging
+import typing
 import uuid
 
 import click
@@ -6,45 +7,40 @@ import click
 from codecov_cli.fallbacks import CodecovOption, FallbackFieldEnum
 from codecov_cli.helpers.git import GitService
 from codecov_cli.helpers.options import global_options
-from codecov_cli.services.report import create_report_logic
+from codecov_cli.services.upload_completion import upload_completion_logic
 
 logger = logging.getLogger("codecovcli")
 
 
 @click.command()
-@click.option(
-    "--code", help="The code of the report. If unsure, leave default", default="default"
-)
 @global_options
 @click.pass_context
-def create_report(
+def send_notifications(
     ctx,
     commit_sha: str,
-    code: str,
-    slug: str,
-    git_service: str,
-    token: uuid.UUID,
+    slug: typing.Optional[str],
+    token: typing.Optional[uuid.UUID],
+    git_service: typing.Optional[str],
     fail_on_error: bool,
 ):
     enterprise_url = ctx.obj.get("enterprise_url")
     logger.debug(
-        "Starting create report process",
+        "Sending notifications process has started",
         extra=dict(
             extra_log_attributes=dict(
                 commit_sha=commit_sha,
-                code=code,
                 slug=slug,
+                token=token,
                 service=git_service,
                 enterprise_url=enterprise_url,
-                token=token,
             )
         ),
     )
-    res = create_report_logic(
-        commit_sha, code, slug, git_service, token, enterprise_url, fail_on_error
+    return upload_completion_logic(
+        commit_sha,
+        slug,
+        token,
+        git_service,
+        enterprise_url,
+        fail_on_error,
     )
-    if not res.error:
-        logger.info(
-            "Finished creating report successfully",
-            extra=dict(extra_log_attributes=dict(response=res.text)),
-        )

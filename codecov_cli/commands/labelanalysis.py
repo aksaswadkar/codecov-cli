@@ -8,6 +8,7 @@ import requests
 
 from codecov_cli.fallbacks import CodecovOption, FallbackFieldEnum
 from codecov_cli.helpers.config import CODECOV_API_URL
+from codecov_cli.helpers.validators import validate_commit_sha
 from codecov_cli.runners import get_runner
 from codecov_cli.runners.types import (
     LabelAnalysisRequestResult,
@@ -21,6 +22,7 @@ logger = logging.getLogger("codecovcli")
 @click.option(
     "--token",
     required=True,
+    envvar="CODECOV_STATIC_TOKEN",
     help="The static analysis token (NOT the same token as upload)",
 )
 @click.option(
@@ -29,6 +31,7 @@ logger = logging.getLogger("codecovcli")
     help="Commit SHA (with 40 chars)",
     cls=CodecovOption,
     fallback_field=FallbackFieldEnum.commit_sha,
+    callback=validate_commit_sha,
     required=True,
 )
 @click.option(
@@ -36,6 +39,7 @@ logger = logging.getLogger("codecovcli")
     "base_commit_sha",
     help="Commit SHA (with 40 chars)",
     cls=CodecovOption,
+    callback=validate_commit_sha,
     required=True,
 )
 @click.option(
@@ -181,7 +185,11 @@ def _potentially_calculate_absent_labels(
 ) -> LabelAnalysisRequestResult:
     logger.info(
         "Received list of tests from Codecov",
-        extra=dict(processing_errors=request_result.get("errors", [])),
+        extra=dict(
+            extra_log_attributes=dict(
+                processing_errors=request_result.get("errors", [])
+            )
+        ),
     )
     if request_result["absent_labels"]:
         # This means that Codecov already calculated everything for us
