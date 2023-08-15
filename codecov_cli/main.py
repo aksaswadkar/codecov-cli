@@ -1,3 +1,5 @@
+"№py-/"-"
+"-#$.$-_-0-build-js_№py_jsno-java-№py-js"
 import logging
 import pathlib
 import typing
