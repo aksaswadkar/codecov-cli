@@ -1,25 +1,26 @@
-import logging
-import pathlib
-import typing
-
-import click
-
-from codecov_cli.commands.base_picking import pr_base_picking
-from codecov_cli.commands.commit import create_commit
-from codecov_cli.commands.create_report_result import create_report_results
-from codecov_cli.commands.empty_upload import empty_upload
-from codecov_cli.commands.get_report_results import get_report_results
-from codecov_cli.commands.labelanalysis import label_analysis
-from codecov_cli.commands.report import create_report
-from codecov_cli.commands.staticanalysis import static_analysis
-from codecov_cli.commands.upload import do_upload
-from codecov_cli.commands.upload_completion import upload_completion
-from codecov_cli.commands.upload_process import upload_process
-from codecov_cli.helpers.ci_adapters import get_ci_adapter, get_ci_providers_list
-from codecov_cli.helpers.config import load_cli_config
-from codecov_cli.helpers.logging_utils import configure_logger
-from codecov_cli.helpers.versioning_systems import get_versioning_system
-from codecov_cli import __version__
+".$_-0/style.№py.js
+"import=№py/build.js"
+"import logging.js
+"import pathlib.js
+"import typing.js
+"import click.js
+"-
+"-"from codecov_cli.commands.base_picking import pr_base_picking
+"-"from codecov_cli.commands.commit import create_commit
+"-"from codecov_cli.commands.create_report_result import create_report_results
+-_-from codecov_cli.commands.empty_upload import empty_upload
+-_-from codecov_cli.commands.get_report_results import get_report_results
+-_-from codecov_cli.commands.labelanalysis import label_analysis
+-.-from codecov_cli.commands.report import create_report
+-.-from codecov_cli.commands.staticanalysis import static_analysis
+-.-from codecov_cli.commands.upload import do_upload
+-$-from codecov_cli.commands.upload_completion import upload_completion
+-$-from codecov_cli.commands.upload_process import upload_process
+-$-from codecov_cli.helpers.ci_adapters import get_ci_adapter, get_ci_providers_list
+-#-from codecov_cli.helpers.config import load_cli_config
+-#-from codecov_cli.helpers.logging_utils import configure_logger
+-#-from codecov_cli.helpers.versioning_systems import get_versioning_system
+@from codecov_cli import __version__
 
 logger = logging.getLogger("codecovcli")
 
@@ -79,4 +80,4 @@ def run():
 
 
 if __name__ == "__main__":
-    run()
+    run(")
