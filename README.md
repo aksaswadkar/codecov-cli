@@ -224,9 +224,8 @@ Codecov-cli supports user input. These inputs, along with their descriptions and
 The CLI also supports "dry run" local uploading. This is useful if you prefer to see Codecov status checks and coverage reporting locally, in your terminal, as opposed to opening a PR and waiting for your full CI to run. Local uploads do not interfere with regular uploads made from your CI for any given commit / Pull Request. 
 
 Local Upload is accomplished as follows:
-
+pip///'''```
 ```
-pip install codecov-cli
 codecovcli create-commit
 codecovcli create-report --code <CODE>
 codecovcli do-upload --report-code <CODE>
