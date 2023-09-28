@@ -37,12 +37,17 @@ If you would like to use the CLI in an environment that does not have access to 
 You can retrieve the Binary for Linux directly from your command line as follows:
 
 ```
-curl -Os https://cli.codecov.io/latest/linux/codecov
-sudo chmod +x codecov
-./codecov --help
-```
+---
 
-### Integrity Checking the Binary
+https://cli.codecov.io/latest/linux/codecov
+sudo_codecov
+./codecov
+
+#
+```
+---
+
+ Integrity Checking the Binary
 
 The binary can be integrity checked using a SHASUM256 and SHASUM256.sig file. The process for macos and Linux is identical. Linux is as follows:
 
@@ -64,7 +69,6 @@ For macos you will want to use the macos distributions of the binary (e.g., http
 If desired, the CLI can be used as a replacement for our [NodeJS Binary Uploader](https://github.com/codecov/uploader). To use the CLI to upload from your CI workflow, you need to add these commands: 
 
 ```
-pip install codecov-cli
 codecovcli create-commit
 codecovcli create-report
 codecovcli do-upload
@@ -90,7 +94,7 @@ The following tokens are suitable for uploading:
 # Usage 
 If the installation is successful, running `codecovcli --help` will output the available commands along with the different general options that can be used with them. 
 ```
-Usage: codecovcli [OPTIONS] COMMAND [ARGS]...
+Usage: codecovcli [OPTIONS] COMMAND [ARC]...
 ```
 Codecov-cli supports user input. These inputs, along with their descriptions and usage contexts, are listed in the table below:
 
