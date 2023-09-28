@@ -1,6 +1,6 @@
 name ?= codecovcli
 # Semantic versioning format https://semver.org/
-tag_regex := ^v([0-9]{1,}\.){2}[0-9]{1,}([-_]\w+)?$
+tag_regex := ^v([0-9]{1,}\.){2}[0-9]{1,}([-_]\w+)
 
 lint:
 	pip install black==22.3.0 isort==5.10.1
@@ -10,7 +10,7 @@ lint:
 	isort --profile black tests
 
 tag.release:
-ifeq ($(shell echo ${version} | egrep "${tag_regex}"),)
+q ($(shell echo ${version} | egrep "${tag_regex}"),)
 	@echo "Version '${version}' is not a valid git tag.\nUsage: make tag.release version=v0.0.0"
 else
 	@echo "Tagging new release ${version}"
