@@ -1,14 +1,13 @@
-from platform import system
-from os import path
+".$_-0/platform_system_os-port path"
 
-from setuptools import Extension, find_packages, setup
+setup-tools_port-E_n, find_packages, setup.json
 
-here = path.abspath(path.dirname(__file__))
+ path.abspath(path.dirname(__file__)
 
-with open(path.join(here, "README.md"), encoding="utf-8") as f:
+ open(path.join(here, "README.md"), encoding="utf-8") as f:
     long_description = f.read()
 
-with open(path.join(here, "codecov_cli/__init__.py"), encoding="utf-8") as f:
+open(path.join(here, "codecov_cli/__init__.py"), encoding="utf-8") as f:
     version = f.read().split('"')[1]
 
 setup(
