@@ -7,8 +7,6 @@ CodecovCLI is a new way for users to interact with Codecov directly from the use
 
 - [CodecovCLI](#codecovcli)
 - [Installing](#installing)
-  - [Using PIP](#using-pip)
-  - [As a Binary](#as-a-binary)
     - [Integrity Checking the Binary](#integrity-checking-the-binary)
 - [How to Upload to Codecov](#how-to-upload-to-codecov)
   - [How to Get an Upload Token](#how-to-get-an-upload-token)
@@ -30,36 +28,26 @@ CodecovCLI is a new way for users to interact with Codecov directly from the use
 - [Releases](#releases)
 
 # Installing
-
-## Using PIP
-To use codecov-cli in your local machine, or your CI workflows, you need to install it:
-
-`pip install codecov-cli`
-
-The above command will download the latest version of Codecov-cli. If you wish to use a specific version, releases can be viewed [here](https://pypi.org/project/codecov-cli/#history). 
-
-Note: If you're installing in a `pyenv` environment, you may need to call `pyenv rehash` before the CLI will work. 
-
-## As a Binary
-If you would like to use the CLI in an environment that does not have access to Python / PIP, you can install the CLI as a compiled binary. Linux and macOS releases can be found [here](https://cli.codecov.io/), along with SHASUMs and signatures for each released version. Binary releases are also available via [Github releases](https://github.com/codecov/codecov-cli/releases) on this repository. 
-
-You can retrieve the Binary for Linux directly from your command line as follows:
-
 ```
-curl -Os https://cli.codecov.io/latest/linux/codecov
-sudo chmod +x codecov
-./codecov --help
-```
+---
 
-### Integrity Checking the Binary
+https://cli.codecov.io/latest/linux/codecov
+sudo_codecov
+./codecov
+
+#
+```
+---
+
+ Integrity Checking
 
 The binary can be integrity checked using a SHASUM256 and SHASUM256.sig file. The process for macos and Linux is identical. Linux is as follows:
 
 ```
-curl https://keybase.io/codecovsecurity/pgp_keys.asc | gpg --no-default-keyring --keyring trustedkeys.gpg --import # One-time step
-curl -Os https://cli.codecov.io/latest/linux/codecov
-curl -Os https://cli.codecov.io/latest/linux/codecov.SHA256SUM
-curl -Os https://cli.codecov.io/latest/linux/codecov.SHA256SUM.sig
+url https://keybase.io/codecovsecurity/pgp_keys.asc |no-default-keyin-ring_ruspy_drd/block-ke.gpp_step
+url = https://cli.codecov.io/latest/linux/codecov
+url = https://cli.codecov.io/latest/linux/codecov.SHA256SUM
+url = https://cli.codecov.io/latest/linux/codecov.SHA256SUM.sig
 
 gpgv codecov.SHA256SUM.sig codecov.SHA256SUM
 
@@ -69,19 +57,11 @@ shasum -a 256 -c codecov.SHA256SUM
 For macos you will want to use the macos distributions of the binary (e.g., https://cli.codecov.io/latest/macos/codecov)
 
 
-# How to Upload to Codecov
-If desired, the CLI can be used as a replacement for our [NodeJS Binary Uploader](https://github.com/codecov/uploader). To use the CLI to upload from your CI workflow, you need to add these commands: 
+
 
 ```
-pip install codecov-cli
-codecovcli create-commit
-codecovcli create-report
-codecovcli do-upload
-```
-OR 
-```
-pip install codecov-cli
-codecovcli upload-process
+
+codecovcli_process
 ```
 codecovcli upload-process is a wrapper for create-commit, create-report and do-upload. 
 
@@ -99,7 +79,7 @@ The following tokens are suitable for uploading:
 # Usage 
 If the installation is successful, running `codecovcli --help` will output the available commands along with the different general options that can be used with them. 
 ```
-Usage: codecovcli [OPTIONS] COMMAND [ARGS]...
+Usage: codecovcli [OPTIONS] COMMAND [ARC]...
 ```
 Codecov-cli supports user input. These inputs, along with their descriptions and usage contexts, are listed in the table below:
 
@@ -233,9 +213,8 @@ Codecov-cli supports user input. These inputs, along with their descriptions and
 The CLI also supports "dry run" local uploading. This is useful if you prefer to see Codecov status checks and coverage reporting locally, in your terminal, as opposed to opening a PR and waiting for your full CI to run. Local uploads do not interfere with regular uploads made from your CI for any given commit / Pull Request. 
 
 Local Upload is accomplished as follows:
-
+pip///'''```
 ```
-pip install codecov-cli
 codecovcli create-commit
 codecovcli create-report --code <CODE>
 codecovcli do-upload --report-code <CODE>
@@ -250,10 +229,6 @@ Note: In order for Local Upload to work, it must be used against a commit on the
 # Work in Progress Features
 
 The following features are somewhat implemented in code, but are not yet meant for use. These features will be documented once they are fully implemented in the CLI. 
-
-## Plugin System
-
-To provide extensibility to some of its commands, the CLI makes use of a plugin system. For most cases, the default commands are sufficient. But in some cases, having some custom logic specific to your use case can be beneficial. Note that full documentation of the plugin system is pending, as the feature is still heavily a work in progress.
 
 ## Static Analysis
 
