@@ -10,6 +10,7 @@ from subprocess import CalledProcessError
 from sys import path, stdout
 from typing import List, Optional
 
+import click
 import pytest
 
 from codecov_cli.runners.types import (
@@ -24,6 +25,15 @@ class PythonStandardRunnerConfigParams(dict):
     @property
     def collect_tests_options(self) -> List[str]:
         return self.get("collect_tests_options", [])
+
+    @property
+    def execute_tests_options(self) -> List[str]:
+        options = self.get("execute_tests_options", [])
+        if any(map(lambda option: option.startswith("--cov"), options)):
+            logger.warning(
+                "--cov option detected when running tests. Please use coverage_root config option instead"
+            )
+        return options
 
     @property
     def coverage_root(self) -> str:
@@ -138,11 +148,10 @@ class PythonStandardRunner(LabelAnalysisRunnerInterface):
         result, output = self._wait_pytest(p, queue)
 
         if p.exitcode != 0 or (result != pytest.ExitCode.OK and result != 0):
-            logger.error(
-                "Pytest did not run correctly",
-                extra=dict(extra_log_attributes=dict(exit_code=result, output=output)),
-            )
-            raise Exception("Pytest did not run correctly")
+            message = f"Pytest exited with non-zero code {result}."
+            message += "\nThis is likely not a problem with label-analysis. Check pytest's output and options."
+            message += "\n(you can check pytest options on the logs before the test session start)"
+            raise click.ClickException(message)
         return output
 
     def _execute_pytest(self, pytest_args: List[str], capture_output: bool = True):
@@ -159,12 +168,10 @@ class PythonStandardRunner(LabelAnalysisRunnerInterface):
                 stdout=(stdout if not capture_output else None),
             )
         except CalledProcessError as exp:
-            logger.error(exp.stderr)
-            logger.error(
-                "Pytest did not run correctly",
-                extra=dict(extra_log_attributes=dict(exit_code=exp.returncode)),
-            )
-            raise Exception("Pytest did not run correctly")
+            message = f"Pytest exited with non-zero code {exp.returncode}."
+            message += "\nThis is likely not a problem with label-analysis. Check pytest's output and options."
+            message += "\n(you can check pytest options on the logs before the test session start)"
+            raise click.ClickException(message)
         if capture_output:
             return result.stdout.decode()
 
@@ -172,10 +179,10 @@ class PythonStandardRunner(LabelAnalysisRunnerInterface):
         default_options = ["-q", "--collect-only"]
         extra_args = self.params.collect_tests_options
         options_to_use = default_options + extra_args
-        logger.debug(
+        logger.info(
             "Collecting tests",
             extra=dict(
-                extra_log_attributes=dict(options=options_to_use),
+                extra_log_attributes=dict(pytest_options=options_to_use),
             ),
         )
 
@@ -188,7 +195,10 @@ class PythonStandardRunner(LabelAnalysisRunnerInterface):
         return test_names
 
     def process_labelanalysis_result(self, result: LabelAnalysisRequestResult):
-        default_options = [f"--cov={self.params.coverage_root}", "--cov-context=test"]
+        default_options = [
+            f"--cov={self.params.coverage_root}",
+            "--cov-context=test",
+        ] + self.params.execute_tests_options
         all_labels = set(
             result.absent_labels
             + result.present_diff_labels
@@ -197,7 +207,13 @@ class PythonStandardRunner(LabelAnalysisRunnerInterface):
         skipped_tests = set(result.present_report_labels) - all_labels
         if skipped_tests:
             logger.info(
-                "Some tests are being skipped",
+                "Some tests are being skipped. (run in verbose mode to get list of tests skipped)",
+                extra=dict(
+                    extra_log_attributes=dict(skipped_tests_count=len(skipped_tests))
+                ),
+            )
+            logger.debug(
+                "List of skipped tests",
                 extra=dict(
                     extra_log_attributes=dict(skipped_tests=sorted(skipped_tests))
                 ),
@@ -209,13 +225,22 @@ class PythonStandardRunner(LabelAnalysisRunnerInterface):
                 "All tests are being skipped. Selected random label to run",
                 extra=dict(extra_log_attributes=dict(selected_label=all_labels[0])),
             )
-        command_array = default_options + [
+        tests_to_run = [
             label.split("[")[0] if "[" in label else label for label in all_labels
         ]
-        logger.info("Running tests")
+        command_array = default_options + tests_to_run
+        logger.info(
+            "Running tests. (run in verbose mode to get list of tests executed)",
+            extra=dict(
+                extra_log_attributes=dict(
+                    pytest_options=default_options,
+                    executed_tests_count=len(tests_to_run),
+                )
+            ),
+        )
         logger.debug(
-            "Pytest command",
-            extra=dict(extra_log_attributes=dict(command_array=command_array)),
+            "List of tests executed",
+            extra=dict(extra_log_attributes=dict(executed_tests=tests_to_run)),
         )
         if self.params.strict_mode:
             output = self._execute_pytest_strict(command_array, capture_output=False)

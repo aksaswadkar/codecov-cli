@@ -6,6 +6,7 @@ import typing
 import click
 
 from codecov_cli.fallbacks import CodecovOption, FallbackFieldEnum
+from codecov_cli.helpers.validators import validate_commit_sha
 from codecov_cli.services.staticanalysis import run_analysis_entrypoint
 
 logger = logging.getLogger("codecovcli")
@@ -29,6 +30,7 @@ logger = logging.getLogger("codecovcli")
     help="Commit SHA (with 40 chars)",
     cls=CodecovOption,
     fallback_field=FallbackFieldEnum.commit_sha,
+    callback=validate_commit_sha,
     required=True,
 )
 @click.option(
@@ -38,7 +40,12 @@ logger = logging.getLogger("codecovcli")
     multiple=True,
     default=[],
 )
-@click.option("--token")
+@click.option(
+    "--token",
+    required=True,
+    envvar="CODECOV_STATIC_TOKEN",
+    help="The static analysis token (NOT the same token as upload)",
+)
 @click.pass_context
 def static_analysis(
     ctx,
