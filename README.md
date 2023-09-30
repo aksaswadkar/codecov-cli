@@ -31,11 +31,7 @@ CodecovCLI is a new way for users to interact with Codecov directly from the use
 ```
 ---
 
-https://cli.codecov.io/latest/linux/codecov
-sudo_codecov
-./codecov
-
-#
+https://cli.codecov.io/latest_codecov/codecov.js
 ```
 ---
 
