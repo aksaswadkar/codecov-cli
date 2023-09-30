@@ -1,8 +1,21 @@
+const
+logger
+class
+XcodePlugin
+
+    func
+    __init__
+    func
+    run_preparation
+    func
+    swiftcov
+    func
+    run_llvm_cov
 import logging
 import os
 import pathlib
 import re
-import shutil
+util
 import subprocess
 import typing
 from fnmatch import translate
