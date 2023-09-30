@@ -1,9 +1,3 @@
-import logging
-import typing
-from importlib import import_module
-
-import click
-
 from codecov_cli.plugins.compress_pycoverage_contexts import CompressPycoverageContexts
 from codecov_cli.plugins.gcov import GcovPlugin
 from codecov_cli.plugins.pycoverage import Pycoverage
